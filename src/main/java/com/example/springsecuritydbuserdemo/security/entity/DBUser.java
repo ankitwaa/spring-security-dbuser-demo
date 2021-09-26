@@ -26,11 +26,11 @@ public class DBUser implements UserDetails {
     private boolean credentialsNotExpired;
     @Column(name="is_enabled")
     private boolean enabled;
-    private List<GrantedAuthority> authorityList;
+    private String authority;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorityList;
+        return List.of(()-> authority);
     }
 
     @Override
