@@ -21,13 +21,9 @@ public class SpringSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        //UserDetails userDetails = User.withUsername("ankit").password("ankit").authorities("read").build();
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
         jdbcUserDetailsManager.setUsersByUsernameQuery("select username, password, enabled from users where username = ?");
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("select username, authority from authorities where username=?");
-        //InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
-        //userDetailsManager.createUser(userDetails);
-
         return jdbcUserDetailsManager;
     }
 
@@ -37,16 +33,4 @@ public class SpringSecurityConfig {
         return passwordEncoder;
     }
 
-    /*@Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .usersByUsernameQuery("select username,password,enabled "
-                        + "from users "
-                        + "where username = ?")
-                .authoritiesByUsernameQuery("select email,authority "
-                        + "from authorities "
-                        + "where email = ?");
-    }*/
 }
