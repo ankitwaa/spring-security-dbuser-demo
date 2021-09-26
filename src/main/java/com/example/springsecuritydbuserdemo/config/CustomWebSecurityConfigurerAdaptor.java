@@ -12,12 +12,6 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 public class CustomWebSecurityConfigurerAdaptor extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("**/secure/**").authenticated().and()
-                .authorizeRequests().antMatchers("**/public/**").permitAll();
-    }
-
     /**
      * This is an alternate way of configuration where we don't need to define our UserDetailService and
      *  PasswordEncoder as Bean. We can override this method and set the UserDetailService and
@@ -31,7 +25,15 @@ public class CustomWebSecurityConfigurerAdaptor extends WebSecurityConfigurerAda
         UserDetails userDetails = User.withUsername("ankit").password("ankit").authorities("read").build();
         InMemoryUserDetailsManager userDetailsService = new InMemoryUserDetailsManager();
         userDetailsService.createUser(userDetails);
-
         auth.userDetailsService(userDetailsService).passwordEncoder(NoOpPasswordEncoder.getInstance());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.httpBasic();
+        http.authorizeRequests().anyRequest().authenticated();
+
+        // http.authorizeRequests().antMatchers("**/secure/**").authenticated().and()
+           //     .authorizeRequests().antMatchers("**/public/**").permitAll();
     }
 }
