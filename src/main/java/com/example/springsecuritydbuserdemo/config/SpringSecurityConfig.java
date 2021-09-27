@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -27,10 +28,24 @@ public class SpringSecurityConfig {
         return jdbcUserDetailsManager;
     }
 
-    @Bean
+   /* @Bean
     public PasswordEncoder passwordEncoder() {
         PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
         return passwordEncoder;
+    }*/
+
+    /**
+     * This implementation of password encoder, delegate the password validation to PasswordEncoder
+     * Implemenation on the basis of prefix in Hash Password.
+     * {noop} - Delegate to NoOpPasswordEncoder.
+     * {bcrypt} - Delegate to BCryptPasswordEncoder.
+     * {scrypt} - Delegate to SCryptPasswordEncoder.
+     * etc.
+     * @return
+     */
+    @Bean
+    public PasswordEncoder passwordEncoderDelegation(){
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
 }
